@@ -1,0 +1,19 @@
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  env: {
+    APP_NAME: 'Solapp',
+
+    devPublicKey: '',
+    devPrivateKey: '[203,184,234,73,20,231,3,96,7,117,79]',
+    devProgramId: '9VKqL3YYMEqYyuts5dbDk9poHSZYU7rjAvnfRrG8SkSJ',
+    devServer: "http://127.0.0.1:8899",
+
+    programId: "Cd1kikgnCy2VbLydXDcXYwSvG4AKtTyWoWbcCbdnH2ge",
+    // programId: "8udUb7njaxECxNyAUoz6WFMky96VzWh8VXH6EELYtjC8",
+    walletAddress: "CnJiLyourJNZJCUwvB3ugnuJ65fGW68b62ewMDXTBSbe",
+    walletPrivateKey: "[27,133,201,83,77]"
+  }
+}
+
+module.exports = nextConfig
