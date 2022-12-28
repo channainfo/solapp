@@ -15,10 +15,24 @@ export default class KeyGen {
     return this.keypair.publicKey.toString();
   }
 
+  public toString(): string {
+    let result: string = [
+      `Private key: ${this.privateKey()}`,
+      "",
+      `Public key: ${this.publicKey()}`
+    ].join("\n")
+
+    return result
+  }
+
   public static create(): KeyGen {
     let keypair = Web3.Keypair.generate();
 
     return new KeyGen(keypair);
+  }
+
+  public static generate(): KeyGen {
+    return KeyGen.create()
   }
 
   public static fromPrivateKey(privateKey: string): KeyGen {

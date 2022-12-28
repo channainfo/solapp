@@ -49,4 +49,16 @@ describe("KeyGen", () => {
 
     })
   })
+
+  describe("#toString", () => {
+    it("return string with private key and public key value", () => {
+      let subject = describedClass.fromPrivateKey(privateKey)
+      let result = subject.toString()
+
+      expect(result).toContain(privateKey)
+      expect(result).toContain("Private key:")
+      expect(result).toContain(publicKey)
+      expect(result).toContain("Public key:")
+    })
+  })
 })
