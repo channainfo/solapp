@@ -1,11 +1,13 @@
 import dotenv from "dotenv"
-import prompts from "prompts";
 import KeyGen from "../../libs/keygen";
 import Logger from "../../libs/logger";
 import KeyGenPrompt from "../../prompts/keygen";
+import Daitol from "dai_tol"
 
 dotenv.config();
 
-KeyGenPrompt.call().then((keygen) => {
-  Logger.d(keygen.toString());
+KeyGenPrompt.callAsync().then((response) => {
+  let keygen: KeyGen = response.get("keygen");
+  Logger.d(keygen.toString())
 })
+

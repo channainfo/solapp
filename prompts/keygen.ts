@@ -2,29 +2,31 @@ import dotenv from "dotenv"
 import prompts from "prompts";
 import KeyGen from "../libs/keygen";
 import Logger from "../libs/logger";
+import Daitol from "dai_tol";
 
 dotenv.config();
 
-export default class KeyGenPrompt {
-  public static async call(): Promise<KeyGen> {
-    let answerOption = await KeyGenPrompt.askOptions()
+class KeyGenPrompt extends Daitol.Executor {
 
-    if (answerOption == "new")
-      return KeyGenPrompt.generateKeyGen()
+  public async callAsync() {
+    await this.askOptions()
 
-    let answerValue = await KeyGenPrompt.askValue(answerOption)
-    let keygen = KeyGenPrompt.loadKeyGen(answerOption, answerValue)
-
-    while (keygen == null) {
-      answerValue = await KeyGenPrompt.askValue(answerOption)
-      keygen = KeyGenPrompt.loadKeyGen(answerOption, answerValue)
+    if (this.execResult.get("answer") == "new") {
+      this.generateKeyGen()
+      return;
     }
 
-    return keygen;
+    await this.askValue()
 
+    this.loadKeyGen()
+
+    while (this.execResult.get("keygen") == null) {
+      await this.askValue()
+      this.loadKeyGen()
+    }
   }
 
-  public static async askOptions(): Promise<string> {
+  public async askOptions() {
     let keygen = "keygen"
 
     const response = await prompts({
@@ -39,11 +41,13 @@ export default class KeyGenPrompt {
     });
 
     let answer = response[keygen]
-    return answer
+    this.execResult.set("answer", answer);
   }
 
-  public static async askValue(answerOption: string): Promise<string> {
+  public async askValue() {
     let keygenValue = "keygenValue"
+    let answerOption = this.execResult.get("answer")
+
     let answerType = answerOption == "env" ? "your ENV var name loaded using process.env" : "your private key string in format 66,14,11,...29,69"
     let keygenValueMessage = `Please enter value for ${answerType}`
 
@@ -54,38 +58,41 @@ export default class KeyGenPrompt {
     });
 
     let answerKeyGenValue = response[keygenValue].trim()
-    return answerKeyGenValue;
+    this.execResult.set("answerValue", answerKeyGenValue)
   }
 
-  public static generateKeyGen(): KeyGen {
+  public generateKeyGen() {
     let keygen = KeyGen.generate()
-    return keygen
+    this.execResult.set("keygen", keygen)
   }
 
-  public static loadKeyGen(anwserOption: string, answerValue: string): KeyGen | null {
+  public loadKeyGen() {
+    let anwserOption = this.execResult.get("answer")
+    let answerValue = this.execResult.get("answerValue")
+
     try {
       if (anwserOption == "env") {
         let privateKey = process.env[answerValue] ?? ""
 
         if (privateKey == "") {
           let errorMessage = `[${answerValue}] is not a valid value. Make sure that process.env.${answerValue} contains a valid value`
-          Logger.d(errorMessage);
-          return null;
+          this.execResult.set("keygen", null)
+          this.execResult.fail(errorMessage);
         }
 
         let keygen = KeyGen.fromPrivateKey(privateKey)
-        return keygen
+        this.execResult.set("keygen", keygen)
       }
       else {
         let privateKey = answerValue;
         if (privateKey == "") {
           let errorMessage = `[${answerValue}] is not a value for private key. Make sure the value is correctly formatted`
-          Logger.d(errorMessage);
-          return null;
+          this.execResult.set("keygen", null)
+          this.execResult.fail(errorMessage)
         }
 
         let keygen = KeyGen.fromPrivateKey(privateKey)
-        return keygen
+        this.execResult.set("keygen", keygen)
       }
     }
     catch (_ex) {
@@ -94,3 +101,5 @@ export default class KeyGenPrompt {
     }
   }
 }
+
+export default KeyGenPrompt;

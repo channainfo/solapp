@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --watch",
+    "test": "jest",
     "keygen": "ts-node bins/commands/keygen.ts"
   },
   "dependencies": {
@@ -25,6 +25,7 @@
     "@types/prompts": "^2.4.2",
     "@types/react": "18.0.26",
     "@types/react-dom": "18.0.10",
+    "dai_tol": "1.0.4",
     "dotenv": "^16.0.3",
     "eslint": "8.30.0",
     "eslint-config-next": "13.1.1",
