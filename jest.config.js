@@ -9,7 +9,7 @@ const createJestConfig = nextJest({
 async function jestConfig() {
   const nextJestConfig = await createJestConfig(customJestConfig)()
   nextJestConfig.transformIgnorePatterns[0] = 'node_modules/(?!@project-serum)/'
-  console.log('nextJestConfig', nextJestConfig)
+  // console.log('nextJestConfig', nextJestConfig)
 
   return nextJestConfig
 }

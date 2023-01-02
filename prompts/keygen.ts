@@ -44,7 +44,7 @@ class KeyGenPrompt extends Daitol.Executor {
     this.execResult.set("answer", answer);
   }
 
-  public async askValue() {
+  private async askValue() {
     let keygenValue = "keygenValue"
     let answerOption = this.execResult.get("answer")
 
@@ -61,12 +61,12 @@ class KeyGenPrompt extends Daitol.Executor {
     this.execResult.set("answerValue", answerKeyGenValue)
   }
 
-  public generateKeyGen() {
+  private generateKeyGen() {
     let keygen = KeyGen.generate()
     this.execResult.set("keygen", keygen)
   }
 
-  public loadKeyGen() {
+  private loadKeyGen() {
     let anwserOption = this.execResult.get("answer")
     let answerValue = this.execResult.get("answerValue")
 
