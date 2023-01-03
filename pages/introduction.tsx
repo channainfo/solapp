@@ -1,12 +1,12 @@
 import { clusterApiUrl, Connection, Keypair, PublicKey, sendAndConfirmTransaction, SystemProgram, Transaction, TransactionInstruction } from "@solana/web3.js";
 import { useState } from "react";
 import Layout from "../components/Layout";
+import KeyGen from "../libs/keygen";
 import Introduction from "../models/introduction";
 
 export default function IntroductionPage() {
   const [loading, setLoading] = useState(false)
   const [txid, setTxid] = useState('')
-
 
   const runProgram = async () => {
     setTxid('');
@@ -15,13 +15,10 @@ export default function IntroductionPage() {
     alert(message)
 
     let programId = new PublicKey(process.env.devProgramId ?? '')
-    let publicKey = new PublicKey(process.env.devPublicKey ?? '')
-
-    let data = programData();
 
     const instructions = new TransactionInstruction({
       keys: [],
-      data: data,
+      data: programData(),
       programId: programId
     })
     const transaction = new Transaction();
@@ -31,7 +28,8 @@ export default function IntroductionPage() {
     const connection = new Connection(apiUrl);
     console.log(`apiUrl: ${apiUrl}`)
 
-    const txId = await sendAndConfirmTransaction(connection, transaction, [keypair()]);
+    let keypair = keygen().keypair;
+    const txId = await sendAndConfirmTransaction(connection, transaction, [keypair]);
     const txIdURI = `
     - solana confirm -v ${txId}
     - https://explorer.solana.com/tx/${txId}?cluster=devnet
@@ -49,10 +47,9 @@ export default function IntroductionPage() {
     return intro.encode()
   }
 
-  const keypair = () => {
-    const secret = JSON.parse(process.env.devPrivateKey ?? "") as number[];
-    const byteArray = Uint8Array.from(secret)
-    return Keypair.fromSecretKey(byteArray);
+  const keygen = (): KeyGen => {
+    let keygen = KeyGen.fromPrivateKey(process.env.devPrivateKey ?? "")
+    return keygen
   }
 
   return (
