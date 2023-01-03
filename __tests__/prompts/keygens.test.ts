@@ -9,7 +9,7 @@ describe("KeyGenPrompt", () => {
   describe("#callAsync", () => {
 
     it("Genate a new keygen if the new option is selected", async () => {
-      let spy = jest.spyOn(subject, 'askOptions',).mockImplementation(async () => {
+      let spy = jest.spyOn(subject, 'askOptions').mockImplementation(async () => {
         await subject.execResult.set("answer", "new")
       })
 
