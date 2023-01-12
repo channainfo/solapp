@@ -1,4 +1,4 @@
-import * as serum from "@project-serum/borsh";
+import * as borsh from "@project-serum/borsh";
 import { Buffer } from "buffer";
 
 class Introduction {
@@ -10,19 +10,18 @@ class Introduction {
     this.message = message;
   }
 
-
-  static schema = serum.struct([
-    serum.u8("variant"),
-    serum.str("name"),
-    serum.str("message")
+  static schema = borsh.struct([
+    borsh.u8("variant"),
+    borsh.str("name"),
+    borsh.str("message")
   ])
 
   encode(): Buffer {
     return Introduction.encode(this)
   }
 
-  static encode(record: Introduction): Buffer {
-    let buffer = Buffer.alloc(1000)
+  static encode(record: Introduction, bufferSize: number = 1000): Buffer {
+    let buffer = Buffer.alloc(bufferSize)
     let payloads = { ...record, variant: 0 }
 
     this.schema.encode(payloads, buffer);
@@ -47,8 +46,9 @@ class Introduction {
       console.log(`Error decoding: ${error}`)
       return null
     }
-
   }
+
+
 }
 
 export default Introduction;
