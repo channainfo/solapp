@@ -1,4 +1,4 @@
-import { clusterApiUrl, Connection, Keypair, PublicKey, sendAndConfirmTransaction, SystemProgram, Transaction, TransactionInstruction } from "@solana/web3.js";
+import { clusterApiUrl, Connection, PublicKey, sendAndConfirmTransaction, Transaction, TransactionInstruction } from "@solana/web3.js";
 import { useState } from "react";
 import Layout from "../components/Layout";
 import KeyGen from "../libs/keygen";
@@ -52,8 +52,12 @@ export default function IntroductionPage() {
     return keygen
   }
 
+  const breadcrumbData = [
+    new Map<string, any>([["label", "Home"], ["url", "/"], ["alt", "Home"]]),
+    new Map<string, any>([["label", "Introduction"], ["url", "/introduction"], ["alt", "Introduction"]]),
+  ]
   return (
-    <Layout home={false}>
+    <Layout home={false} breadcrumbs={breadcrumbData}>
       <div style={{ marginTop: '30px', maxWidth: '1024px' }}>
         <h2>Introduction Program</h2>
         <ul>

@@ -1,0 +1,20 @@
+.breadcrumb {
+  border: 1px solid #ddd;
+  background: #eee;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 90%;
+  border-radius: 6px;
+}
+
+.breadcrumb-item {
+  color: blue;
+}
+
+.breadcrumb-active {
+  color: gray;
+}
+
+.breadcrumb-sep {
+  color: gray;
+}
